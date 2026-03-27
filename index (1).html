@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caracterización de escuelas primarias de Sonora</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f4f2; color: #1a1a1a; line-height: 1.6; }
+
+  /* TOPBAR */
+  .topbar { background: #1a3d2b; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .topbar-title { color: #fff; font-size: 15px; font-weight: 600; }
+  .topbar-sub { color: #7fbf9a; font-size: 12px; margin-top: 2px; }
+  .topbar-badge { background: rgba(255,255,255,0.12); color: #c8e6d4; font-size: 11px; padding: 4px 10px; border-radius: 20px; }
+
+  /* NAV */
+  .nav { background: #fff; border-bottom: 1px solid #e0e0d8; padding: 0 16px; display: flex; gap: 2px; overflow-x: auto; }
+  .nav-btn { padding: 12px 16px; border: none; background: transparent; color: #555; font-size: 13px; cursor: pointer; font-family: inherit; white-space: nowrap; border-bottom: 2px solid transparent; transition: color 0.15s; }
+  .nav-btn:hover { color: #1a3d2b; }
+  .nav-btn.active { color: #1a3d2b; font-weight: 600; border-bottom-color: #1a3d2b; }
+
+  /* LAYOUT */
+  .container { max-width: 900px; margin: 0 auto; padding: 28px 20px 60px; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero { background: #1a3d2b; border-radius: 12px; padding: 28px 32px; margin-bottom: 24px; }
+  .hero h1 { color: #fff; font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+  .hero p { color: #a8d4b8; font-size: 14px; line-height: 1.7; }
+
+  /* CARDS */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+  @media (max-width: 600px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } .context-grid { grid-template-columns: 1fr !important; } }
+  .card { background: #fff; border: 1px solid #e8e8e0; border-radius: 10px; padding: 16px; }
+  .card-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .card-value { font-size: 24px; font-weight: 600; color: #1a1a1a; }
+  .card-sub { font-size: 13px; color: #666; margin-top: 4px; line-height: 1.5; }
+
+  /* SECTION TITLE */
+  .section-title { font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid #e8e8e0; }
+
+  /* TIMELINE */
+  .tl-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .tl-date { font-size: 12px; font-weight: 500; color: #666; min-width: 110px; padding-top: 3px; }
+  .tl-dot { width: 8px; height: 8px; border-radius: 50%; background: #1a3d2b; margin-top: 6px; flex-shrink: 0; }
+  .tl-text { font-size: 13px; color: #333; line-height: 1.6; }
+  .pill { display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 20px; margin-right: 6px; }
+  .pill-done { background: #e6f4ec; color: #1a5c30; }
+  .pill-now { background: #fef3e2; color: #7a4a00; }
+  .pill-pend { background: #f0f0ec; color: #555; }
+
+  /* TEAM */
+  .team-card { background: #fff; border: 1px solid #e8e8e0; border-radius: 10px; padding: 18px; margin-bottom: 12px; }
+  .team-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .avatar { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .av-ena { background: #e1f5ee; color: #085041; }
+  .av-mario { background: #e6f1fb; color: #0c447c; }
+  .av-carlos { background: #eeedfe; color: #3c3489; }
+  .av-victor { background: #faeeda; color: #633806; }
+  .team-name { font-size: 15px; font-weight: 600; color: #1a1a1a; }
+  .team-role { font-size: 12px; color: #777; }
+  .team-q { font-size: 13px; color: #555; font-style: italic; margin-bottom: 10px; border-left: 3px solid #e0e0d8; padding-left: 10px; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+  .tag-g { background: #e6f4ec; color: #1a5c30; }
+  .tag-b { background: #e6f1fb; color: #0c447c; }
+  .tag-p { background: #eeedfe; color: #3c3489; }
+  .tag-a { background: #faeeda; color: #633806; }
+
+  /* CONTEXT */
+  .context-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+  .ctx { border-radius: 10px; padding: 16px; border: 1px solid transparent; }
+  .ctx-u { background: #e6f1fb; border-color: #b5d4f4; }
+  .ctx-f { background: #faeeda; border-color: #fac775; }
+  .ctx-i { background: #e1f5ee; border-color: #9fe1cb; }
+  .ctx-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .ctx-u .ctx-title { color: #0c447c; }
+  .ctx-f .ctx-title { color: #633806; }
+  .ctx-i .ctx-title { color: #085041; }
+  .ctx-loc { font-size: 12px; margin-bottom: 8px; }
+  .ctx-u .ctx-loc { color: #185fa5; }
+  .ctx-f .ctx-loc { color: #854f0b; }
+  .ctx-i .ctx-loc { color: #0f6e56; }
+  .ctx-txt { font-size: 12px; line-height: 1.6; }
+  .ctx-u .ctx-txt { color: #185fa5; }
+  .ctx-f .ctx-txt { color: #854f0b; }
+  .ctx-i .ctx-txt { color: #0f6e56; }
+
+  /* INFO BOX */
+  .info-box { background: #f8f8f4; border-left: 3px solid #1a3d2b; border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 16px; font-size: 13px; color: #444; line-height: 1.7; }
+  .info-box strong { color: #1a1a1a; }
+
+  /* INSTRUMENTS */
+  .instr-block { margin-bottom: 16px; border-radius: 10px; overflow: hidden; border: 1px solid #e8e8e0; }
+  .instr-head { padding: 12px 16px; }
+  .ih-34 { background: #1a3d2b; }
+  .ih-56 { background: #1a5276; }
+  .ih-fam { background: #0f6e56; }
+  .ih-dir { background: #633806; }
+  .ih-eq { background: #2c2c2a; }
+  .instr-head-title { color: #fff; font-size: 14px; font-weight: 600; }
+  .instr-head-sub { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 2px; }
+  .instr-table { width: 100%; border-collapse: collapse; }
+  .instr-table th { background: #f4f4f2; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #777; padding: 8px 12px; text-align: left; border-bottom: 1px solid #e8e8e0; }
+  .instr-table td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #f0f0ec; vertical-align: middle; }
+  .instr-table tr:last-child td { border-bottom: none; }
+  .instr-table tr:hover td { background: #fafaf8; }
+  .td-num { color: #aaa; font-size: 12px; width: 32px; text-align: center; }
+  .td-name { color: #1a1a1a; font-weight: 500; }
+  .td-quien { color: #666; font-size: 12px; }
+  .td-time { color: #1a3d2b; font-weight: 600; font-size: 12px; text-align: center; }
+  .td-day { color: #aaa; font-size: 11px; }
+
+  /* COMPLEJIDAD */
+  .comp-box { background: #f4f2fe; border-left: 3px solid #534ab7; border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 14px; }
+  .comp-title { font-size: 14px; font-weight: 600; color: #3c3489; margin-bottom: 6px; }
+  .comp-text { font-size: 13px; color: #555; line-height: 1.7; }
+
+  /* GUIA DOCENTE */
+  .day-block { margin-bottom: 14px; }
+  .day-head { padding: 10px 14px; border-radius: 8px 8px 0 0; }
+  .dh-1 { background: #1a3d2b; }
+  .dh-2 { background: #145a32; }
+  .day-head-text { color: #fff; font-size: 13px; font-weight: 600; }
+  .day-body { border: 1px solid #e8e8e0; border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
+  .day-row { display: grid; grid-template-columns: 80px 1fr 80px; border-bottom: 1px solid #f0f0ec; }
+  .day-row:last-child { border-bottom: none; }
+  .dr-num { padding: 12px; background: #f8f8f4; font-size: 11px; font-weight: 600; color: #1a3d2b; text-align: center; border-right: 1px solid #f0f0ec; display: flex; align-items: center; justify-content: center; }
+  .dr-text { padding: 12px 14px; font-size: 13px; color: #333; line-height: 1.6; }
+  .dr-time { padding: 12px 8px; font-size: 12px; font-weight: 600; color: #1a3d2b; text-align: center; border-left: 1px solid #f0f0ec; display: flex; align-items: center; justify-content: center; }
+
+  /* FAQ */
+  .faq-item { border: 1px solid #e8e8e0; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+  .faq-q { padding: 14px 16px; font-size: 14px; font-weight: 500; color: #1a1a1a; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fff; user-select: none; }
+  .faq-q:hover { background: #fafaf8; }
+  .faq-chevron { color: #aaa; font-size: 12px; transition: transform 0.2s; flex-shrink: 0; margin-left: 12px; }
+  .faq-chevron.open { transform: rotate(180deg); }
+  .faq-a { padding: 14px 16px; font-size: 13px; color: #555; line-height: 1.7; background: #f8f8f4; border-top: 1px solid #e8e8e0; display: none; }
+  .faq-a.open { display: block; }
+
+  /* INTEGRATION GRID */
+  .int-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .int-box { text-align: center; padding: 12px; background: #f8f8f4; border-radius: 8px; }
+  .int-who { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+  .int-q { font-size: 12px; color: #666; }
+
+  /* DOCUMENTOS */
+  .doc-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+  .doc-btn { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-radius: 8px; text-decoration: none; border: 1px solid; transition: opacity 0.15s; }
+  .doc-btn:hover { opacity: 0.85; }
+  .doc-icon { font-size: 18px; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; }
+  .doc-name { font-size: 14px; font-weight: 500; }
+  .doc-meta { font-size: 12px; margin-top: 2px; }
+  .doc-34 { background: #f0f7f3; border-color: #a8d4b8; }
+  .doc-34 .doc-icon { background: #1a3d2b; color: #fff; }
+  .doc-34 .doc-name { color: #1a3d2b; }
+  .doc-34 .doc-meta { color: #2d7a4f; }
+  .doc-56 { background: #eaf2fb; border-color: #a8c8e8; }
+  .doc-56 .doc-icon { background: #1a5276; color: #fff; }
+  .doc-56 .doc-name { color: #1a5276; }
+  .doc-56 .doc-meta { color: #2874a6; }
+  .doc-fam { background: #e8f5ef; border-color: #9fd4b8; }
+  .doc-fam .doc-icon { background: #0f6e56; color: #fff; }
+  .doc-fam .doc-name { color: #0f6e56; }
+  .doc-fam .doc-meta { color: #1a8a6a; }
+  .doc-eq { background: #f4f4f0; border-color: #c8c8c0; }
+  .doc-eq .doc-icon { background: #2c2c2a; color: #fff; }
+  .doc-eq .doc-name { color: #2c2c2a; }
+  .doc-eq .doc-meta { color: #666; }
+  .doc-ena { background: #e8f5ee; border-color: #9fd8b4; }
+  .doc-ena .doc-icon { background: #0d6b40; color: #fff; }
+  .doc-ena .doc-name { color: #0d6b40; }
+  .doc-ena .doc-meta { color: #1a8a56; }
+
+  /* WHATSAPP BOX */
+  .wa-box { background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 8px; padding: 14px 16px; margin-top: 14px; }
+  .wa-title { font-size: 13px; font-weight: 600; color: #1b5e20; margin-bottom: 8px; }
+  .wa-row { font-size: 13px; color: #2e7d32; margin-bottom: 4px; padding-left: 4px; }
+  .wa-note { font-size: 12px; color: #555; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="topbar-title">Caracterización de la vida escolar en escuelas primarias de Sonora</div>
+    <div class="topbar-sub">Universidad de Sonora &middot; Ciclo escolar 2025&ndash;2026</div>
+  </div>
+  <div class="topbar-badge">Sitio interno del equipo</div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showPage('inicio', this)">Inicio</button>
+  <button class="nav-btn" onclick="showPage('equipo', this)">El equipo</button>
+  <button class="nav-btn" onclick="showPage('contextos', this)">Contextos</button>
+  <button class="nav-btn" onclick="showPage('instrumentos', this)">Instrumentos</button>
+  <button class="nav-btn" onclick="showPage('documentos', this)">Documentos</button>
+  <button class="nav-btn" onclick="showPage('docentes', this)">Para docentes</button>
+  <button class="nav-btn" onclick="showPage('faq', this)">Preguntas frecuentes</button>
+</div>
+
+<div class="container">
+
+  <!-- INICIO -->
+  <div id="inicio" class="page active">
+    <div class="hero">
+      <h1>Bienvenidos al proyecto</h1>
+      <p>Estamos caracterizando la vida escolar en tres contextos contrastantes de Sonora: urbano, fronterizo e ind&iacute;gena. Este sitio concentra todo lo que el equipo y los colaboradores de campo necesitan saber.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="card-label">Escuelas</div><div class="card-value">3</div><div class="card-sub">Hermosillo &middot; Naco/Nogales &middot; Pob. Miguel Alem&aacute;n</div></div>
+      <div class="card"><div class="card-label">Grados participantes</div><div class="card-value">3&deg; a 6&deg;</div><div class="card-sub">Primaria &mdash; dos versiones de instrumentos</div></div>
+      <div class="card"><div class="card-label">Trabajo de campo</div><div class="card-value">Abr&ndash;Jul 2026</div><div class="card-sub">Coordinaci&oacute;n remota + visitas puntuales</div></div>
+    </div>
+
+    <div class="section-title">Estado del proyecto</div>
+    <div style="margin-bottom:24px;">
+      <div class="tl-row"><div class="tl-date">Oct 2025 &ndash; Mar 2026</div><div class="tl-dot"></div><div class="tl-text"><span class="pill pill-done">Completado</span> Dise&ntilde;o de instrumentos &middot; Documento de trabajo del equipo &middot; Presentaci&oacute;n para escuelas</div></div>
+      <div class="tl-row"><div class="tl-date">Abr &ndash; May 2026</div><div class="tl-dot" style="background:#ba7517;"></div><div class="tl-text"><span class="pill pill-now">En curso</span> Gesti&oacute;n de aval &eacute;tico &middot; Permisos en escuelas &middot; Preparaci&oacute;n de coordinadores locales</div></div>
+      <div class="tl-row"><div class="tl-date">Jun &ndash; Jul 2026</div><div class="tl-dot" style="background:#bbb;"></div><div class="tl-text"><span class="pill pill-pend">Pendiente</span> Trabajo de campo en las tres escuelas</div></div>
+      <div class="tl-row"><div class="tl-date">Ago &ndash; Sep 2026</div><div class="tl-dot" style="background:#bbb;"></div><div class="tl-text"><span class="pill pill-pend">Pendiente</span> Captura y organizaci&oacute;n de datos</div></div>
+      <div class="tl-row"><div class="tl-date">Oct &ndash; Dic 2026</div><div class="tl-dot" style="background:#bbb;"></div><div class="tl-text"><span class="pill pill-pend">Pendiente</span> An&aacute;lisis comparativo por contexto</div></div>
+      <div class="tl-row"><div class="tl-date">Ene &ndash; Jun 2027</div><div class="tl-dot" style="background:#bbb;"></div><div class="tl-text"><span class="pill pill-pend">Pendiente</span> Redacci&oacute;n de art&iacute;culos y policy briefs &middot; Presentaci&oacute;n a escuelas y SEP</div></div>
+    </div>
+
+    <div class="section-title">¿C&oacute;mo usar este sitio?</div>
+    <div class="grid-2">
+      <div class="card"><div class="card-label">Si eres del equipo de investigaci&oacute;n</div><div class="card-sub" style="margin-top:6px;">Consulta la secci&oacute;n <strong>El equipo</strong> para ver los instrumentos de cada quien y la secci&oacute;n <strong>Instrumentos</strong> para el listado completo organizado por aplicador.</div></div>
+      <div class="card"><div class="card-label">Si eres docente o coordinador de campo</div><div class="card-sub" style="margin-top:6px;">Ve directamente a <strong>Para docentes</strong>. Ah&iacute; encontrar&aacute;s qu&eacute; hacer, en qu&eacute; orden y por qu&eacute; &mdash; explicado sin tecnicismos.</div></div>
+    </div>
+  </div>
+
+  <!-- EQUIPO -->
+  <div id="equipo" class="page">
+    <div class="section-title">El equipo de investigaci&oacute;n</div>
+    <div class="team-card">
+      <div class="team-header"><div class="avatar av-ena">ER</div><div><div class="team-name">Dra. Ena Romero</div><div class="team-role">Psicolog&iacute;a escolar &middot; Universidad de Sonora</div></div></div>
+      <div class="team-q">&iquest;C&oacute;mo se sienten los ni&ntilde;os, c&oacute;mo es su bienestar y qu&eacute; actitudes tienen?</div>
+      <div class="tag-list">
+        <span class="tag tag-g">C.A.E.F. &mdash; actitudes hacia Educaci&oacute;n F&iacute;sica (Rodr&iacute;guez, Moreno y Guti&eacute;rrez, 1996)</span>
+        <span class="tag tag-g">Kid-KINDL &mdash; calidad de vida infantil</span>
+        <span class="tag tag-g">SIC &mdash; satisfacci&oacute;n con imagen corporal (Garc&iacute;a Tornel y Gaspar, adapt. Raich 2001)</span>
+        <span class="tag tag-g">Inventario de h&aacute;bitos alimenticios y actividad f&iacute;sica</span>
+        <span class="tag tag-g">Historia cl&iacute;nica &mdash; para padres o tutores</span>
+        <span class="tag tag-g">Historia del desarrollo psicol&oacute;gico &mdash; para padres o tutores</span>
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="team-header"><div class="avatar av-mario">MH</div><div><div class="team-name">Dr. Mario Horta</div><div class="team-role">Cultura F&iacute;sica y Deportes &middot; Universidad de Sonora</div></div></div>
+      <div class="team-q">&iquest;Cu&aacute;l es la condici&oacute;n f&iacute;sica de los ni&ntilde;os?</div>
+      <div class="tag-list">
+        <span class="tag tag-b">FitnessGram &mdash; 7 pruebas</span>
+        <span class="tag tag-b">Antropometr&iacute;a</span>
+        <span class="tag tag-b">Composici&oacute;n corporal</span>
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="team-header"><div class="avatar av-victor">VH</div><div><div class="team-name">V&iacute;ctor Hugo Horta</div><div class="team-role">Lic. Cultura F&iacute;sica &middot; Maestrante &middot; Universidad de Sonora</div></div></div>
+      <div class="team-q">&iquest;C&oacute;mo es la competencia motriz y la calidad pedag&oacute;gica de EF?</div>
+      <div class="tag-list">
+        <span class="tag tag-a">Competencia motriz percibida</span>
+        <span class="tag tag-a">Competencia motriz real</span>
+        <span class="tag tag-a">Calidad pedag&oacute;gica &mdash; clase de EF</span>
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="team-header"><div class="avatar av-carlos">CH</div><div><div class="team-name">Carlos Horta</div><div class="team-role">Mtro. Ciencias Sociales &middot; Doctorando en Investigaci&oacute;n Social &middot; Universidad Nacional Rosario Castellanos</div></div></div>
+      <div class="team-q">&iquest;En qu&eacute; contexto ocurre todo esto y qu&eacute; lo explica?</div>
+      <div class="tag-list">
+        <span class="tag tag-p">Cuestionario ni&ntilde;os &mdash; convivencia, vi&ntilde;etas, lunch</span>
+        <span class="tag tag-p">Sociograma de juego y comida</span>
+        <span class="tag tag-p">Reglas situadas del recreo</span>
+        <span class="tag tag-p">Mapa del patio</span>
+        <span class="tag tag-p">Observaci&oacute;n recreo y lunch</span>
+        <span class="tag tag-p">Entrevista a docentes</span>
+        <span class="tag tag-p">Ficha de contexto escolar</span>
+        <span class="tag tag-p">Encuesta a familias</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">La l&oacute;gica de integraci&oacute;n</div>
+      <div class="int-grid">
+        <div class="int-box"><div class="int-who">Mario + V&iacute;ctor</div><div class="int-q">&iquest;Qu&eacute; nivel? &iquest;Cu&aacute;nto?</div></div>
+        <div class="int-box"><div class="int-who">Ena</div><div class="int-q">&iquest;C&oacute;mo se siente? &iquest;Qu&eacute; actitud?</div></div>
+        <div class="int-box"><div class="int-who">Carlos</div><div class="int-q">&iquest;Por qu&eacute;? &iquest;En qu&eacute; contexto?</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEXTOS -->
+  <div id="contextos" class="page">
+    <div class="section-title">Los tres contextos del estudio</div>
+    <div class="context-grid">
+      <div class="ctx ctx-u"><div class="ctx-title">Urbano</div><div class="ctx-loc">Hermosillo, Sonora</div><div class="ctx-txt">Escuela p&uacute;blica urbana. Acceso a tiendita y oferta alimentaria diversa. Pol&iacute;ticas SEP m&aacute;s presentes.</div></div>
+      <div class="ctx ctx-f"><div class="ctx-title">Fronterizo</div><div class="ctx-loc">Naco / Nogales</div><div class="ctx-txt">Comunidad binacional. Influencia cultural y econ&oacute;mica de EUA. Mezcla de h&aacute;bitos y productos.</div></div>
+      <div class="ctx ctx-i"><div class="ctx-title">Ind&iacute;gena</div><div class="ctx-loc">Poblado Miguel Alem&aacute;n</div><div class="ctx-txt">Comunidad yaqui (~35,000 hab., Censo 2020). Identidad cultural, lengua y organizaci&oacute;n comunitaria propias. Coordinadora local: Zoila.</div></div>
+    </div>
+    <div class="info-box"><strong>Nota sobre la categorizaci&oacute;n:</strong> El Poblado Miguel Alem&aacute;n fue clasificado como &ldquo;rural&rdquo; en la tesis doctoral de la Dra. Romero (2015). En este proyecto se adopta la categor&iacute;a &ldquo;ind&iacute;gena&rdquo;, que es m&aacute;s precisa: con ~35,000 habitantes supera el umbral de localidad rural del INEGI (menos de 2,500 hab.). Lo que define a esta comunidad como contexto diferenciado es su pertenencia al pueblo yaqui.</div>
+    <div class="section-title">Antecedentes del proyecto</div>
+    <div class="card"><div class="card-sub" style="line-height:1.7;">Este proyecto tiene su origen en la tesis doctoral de la Dra. Ena Romero (Le&oacute;n, 2015), que estudi&oacute; los efectos de un programa de ejercicio f&iacute;sico sobre la composici&oacute;n corporal e imagen corporal en 119 ni&ntilde;os y ni&ntilde;as de 8 a 11 a&ntilde;os con sobrepeso u obesidad en tres comunidades de Sonora. El hallazgo central fue que el ejercicio mejor&oacute; la autoimagen aunque no cambi&oacute; el IMC ni la condici&oacute;n f&iacute;sica general. El presente proyecto retoma esas escuelas con un dise&ntilde;o descriptivo-comparativo sin intervenci&oacute;n &mdash; el objetivo es caracterizar c&oacute;mo son esas escuelas en su vida cotidiana y comparar los patrones entre contextos.</div></div>
+  </div>
+
+  <!-- INSTRUMENTOS -->
+  <div id="instrumentos" class="page">
+    <div class="section-title">Instrumentos por aplicador</div>
+
+    <div class="instr-block">
+      <div class="instr-head ih-34"><div class="instr-head-title">Paquete 3&deg; y 4&deg; de primaria</div><div class="instr-head-sub">Docente lee en voz alta &middot; tarjetas de colores &middot; mapa por equipos</div></div>
+      <table class="instr-table"><thead><tr><th></th><th>Instrumento</th><th>¿Quién aplica?</th><th>Tiempo</th><th>Momento</th></tr></thead><tbody>
+        <tr><td class="td-num">1</td><td class="td-name">Cuestionario para alumnos &mdash; convivencia, vi&ntilde;etas, lunch, sociograma</td><td class="td-quien">Docente lee en voz alta</td><td class="td-time">25&ndash;30 min</td><td class="td-day">D&iacute;a 1</td></tr>
+        <tr><td class="td-num">2</td><td class="td-name">Checklist de observaci&oacute;n de recreo</td><td class="td-quien">Docente observa</td><td class="td-time">15 min</td><td class="td-day">D&iacute;a 1</td></tr>
+        <tr><td class="td-num">3</td><td class="td-name">Checklist de observaci&oacute;n de lunch</td><td class="td-quien">Docente observa</td><td class="td-time">10 min</td><td class="td-day">D&iacute;a 1</td></tr>
+        <tr><td class="td-num">4</td><td class="td-name">Mapa del patio &mdash; modalidad por equipos de 4</td><td class="td-quien">Docente facilita</td><td class="td-time">20 min</td><td class="td-day">D&iacute;a 2</td></tr>
+        <tr><td class="td-num">5</td><td class="td-name">Reglas situadas &mdash; Versi&oacute;n A (tarjetas verde / amarilla / roja)</td><td class="td-quien">Docente aplica</td><td class="td-time">12 min</td><td class="td-day">D&iacute;a 2</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="instr-block">
+      <div class="instr-head ih-56"><div class="instr-head-title">Paquete 5&deg; y 6&deg; de primaria</div><div class="instr-head-sub">Alumnos responden solos &middot; mapa individual &middot; Versi&oacute;n B escrita</div></div>
+      <table class="instr-table"><thead><tr><th></th><th>Instrumento</th><th>¿Quién aplica?</th><th>Tiempo</th><th>Momento</th></tr></thead><tbody>
+        <tr><td class="td-num">1</td><td class="td-name">Cuestionario para alumnos &mdash; convivencia, vi&ntilde;etas, lunch, sociograma</td><td class="td-quien">Autoaplicado</td><td class="td-time">25&ndash;30 min</td><td class="td-day">D&iacute;a 1</td></tr>
+        <tr><td class="td-num">2</td><td class="td-name">Checklist de observaci&oacute;n de recreo</td><td class="td-quien">Docente observa</td><td class="td-time">15 min</td><td class="td-day">D&iacute;a 1</td></tr>
+        <tr><td class="td-num">3</td><td class="td-name">Checklist de observaci&oacute;n de lunch</td><td class="td-quien">Docente observa</td><td class="td-time">10 min</td><td class="td-day">D&iacute;a 1</td></tr>
+        <tr><td class="td-num">4</td><td class="td-name">Mapa del patio &mdash; modalidad individual</td><td class="td-quien">Docente distribuye</td><td class="td-time">20 min</td><td class="td-day">D&iacute;a 2</td></tr>
+        <tr><td class="td-num">5</td><td class="td-name">Reglas situadas &mdash; Versi&oacute;n B (hoja escrita individual)</td><td class="td-quien">Autoaplicado</td><td class="td-time">15 min</td><td class="td-day">D&iacute;a 2</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="instr-block">
+      <div class="instr-head ih-fam"><div class="instr-head-title">Familias</div><div class="instr-head-sub">Autoaplicada &middot; para quien se ocupa de la alimentaci&oacute;n del ni&ntilde;o</div></div>
+      <table class="instr-table"><thead><tr><th></th><th>Instrumento</th><th>¿Quién aplica?</th><th>Tiempo</th><th>Momento</th></tr></thead><tbody>
+        <tr><td class="td-num">1</td><td class="td-name">Encuesta a familias &mdash; lunch, dinero, actividad f&iacute;sica, expectativas, percepci&oacute;n de la escuela</td><td class="td-quien">Autoaplicada</td><td class="td-time">12&ndash;15 min</td><td class="td-day">Flexible</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="instr-block">
+      <div class="instr-head ih-dir"><div class="instr-head-title">Director y equipo de investigaci&oacute;n</div><div class="instr-head-sub">Una sola vez por escuela</div></div>
+      <table class="instr-table"><thead><tr><th></th><th>Instrumento</th><th>¿Quién aplica?</th><th>Tiempo</th><th>Momento</th></tr></thead><tbody>
+        <tr><td class="td-num">1</td><td class="td-name">Ficha de contexto escolar</td><td class="td-quien">Director llena</td><td class="td-time">15 min</td><td class="td-day">Visita 1</td></tr>
+        <tr><td class="td-num">2</td><td class="td-name">Entrevista a docente colaborador</td><td class="td-quien">Equipo entrevista</td><td class="td-time">10&ndash;15 min</td><td class="td-day">Visita 1</td></tr>
+        <tr><td class="td-num">3</td><td class="td-name">Recorrido fotogr&aacute;fico del patio</td><td class="td-quien">Equipo o coordinador</td><td class="td-time">15 min</td><td class="td-day">Visita 1</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="instr-block">
+      <div class="instr-head ih-eq"><div class="instr-head-title">Instrumentos de Mario, V&iacute;ctor y Ena</div><div class="instr-head-sub">Aplicados por el equipo o maestro de EF</div></div>
+      <table class="instr-table"><thead><tr><th></th><th>Instrumento</th><th>¿Quién aplica?</th><th>Tiempo</th><th>Momento</th></tr></thead><tbody>
+        <tr><td class="td-num">1</td><td class="td-name">FitnessGram &mdash; 7 pruebas de condici&oacute;n f&iacute;sica + antropometr&iacute;a</td><td class="td-quien">Mario / V&iacute;ctor / maestro EF</td><td class="td-time">45&ndash;60 min</td><td class="td-day">Sesi&oacute;n EF</td></tr>
+        <tr><td class="td-num">2</td><td class="td-name">C.A.E.F. &mdash; actitudes hacia Educaci&oacute;n F&iacute;sica</td><td class="td-quien">Ena / docente</td><td class="td-time">20&ndash;25 min</td><td class="td-day">En clase</td></tr>
+        <tr><td class="td-num">3</td><td class="td-name">Kid-KINDL &mdash; calidad de vida infantil</td><td class="td-quien">Ena / docente</td><td class="td-time">20&ndash;25 min</td><td class="td-day">En clase</td></tr>
+        <tr><td class="td-num">4</td><td class="td-name">SIC &mdash; satisfacci&oacute;n con imagen corporal</td><td class="td-quien">Ena / docente</td><td class="td-time">15 min</td><td class="td-day">En clase</td></tr>
+        <tr><td class="td-num">5</td><td class="td-name">Inventario de h&aacute;bitos alimenticios y actividad f&iacute;sica</td><td class="td-quien">Ena / docente</td><td class="td-time">20 min</td><td class="td-day">En clase</td></tr>
+        <tr><td class="td-num">6</td><td class="td-name">Historia cl&iacute;nica &mdash; antecedentes m&eacute;dicos y perinatales</td><td class="td-quien">Ena con padres/tutores</td><td class="td-time">15&ndash;20 min</td><td class="td-day">Con familias</td></tr>
+        <tr><td class="td-num">7</td><td class="td-name">Historia del desarrollo psicol&oacute;gico &mdash; antecedentes familiares y emocionales</td><td class="td-quien">Ena con padres/tutores</td><td class="td-time">15&ndash;20 min</td><td class="td-day">Con familias</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- PARA DOCENTES -->
+  <div id="docentes" class="page">
+    <div class="section-title">Gu&iacute;a para docentes y coordinadores</div>
+
+    <div class="comp-box">
+      <div class="comp-title">&iquest;Por qu&eacute; le preguntamos al ni&ntilde;o sobre las &ldquo;reglas no escritas&rdquo; del recreo?</div>
+      <div class="comp-text">En cada escuela hay reglas que todos conocen pero que nadie escribi&oacute; en ning&uacute;n reglamento: qui&eacute;n usa la cancha grande, c&oacute;mo se decide qui&eacute;n puede jugar, qu&eacute; pasa si alguien quiere entrar a un juego que ya empez&oacute;. Estas reglas invisibles organizan el recreo tanto como las reglas oficiales &mdash; a veces m&aacute;s. Capturarlas nos ayuda a entender por qu&eacute; algunos ni&ntilde;os y ni&ntilde;as son m&aacute;s activos que otros, y por qu&eacute; esos patrones son distintos en Hermosillo, en la zona fronteriza y en el Poblado Miguel Alem&aacute;n.</div>
+    </div>
+
+    <div class="comp-box">
+      <div class="comp-title">&iquest;Por qu&eacute; pedimos que los ni&ntilde;os dibujen el patio?</div>
+      <div class="comp-text">El mapa que dibuja cada ni&ntilde;o nos dice algo que una fotograf&iacute;a no puede: c&oacute;mo percibe ese ni&ntilde;o el espacio. &iquest;D&oacute;nde se siente que puede estar? &iquest;Qu&eacute; zonas evita? Dos ni&ntilde;os en la misma escuela pueden tener mapas completamente distintos seg&uacute;n su experiencia. Comparar esos mapas es una de las formas m&aacute;s directas de entender si el recreo funciona igual para todos.</div>
+    </div>
+
+    <div class="comp-box">
+      <div class="comp-title">&iquest;Por qu&eacute; observamos el recreo si los ni&ntilde;os ya respondieron un cuestionario?</div>
+      <div class="comp-text">Lo que los ni&ntilde;os dicen que hacen y lo que realmente hacen a veces es distinto &mdash; no porque mientan, sino porque no siempre notamos nuestros propios patrones. La observaci&oacute;n del docente nos da una segunda fuente de informaci&oacute;n independiente. Cuando coincide con el cuestionario, tenemos mayor certeza. Cuando no coincide, eso tambi&eacute;n nos dice algo importante.</div>
+    </div>
+
+    <div class="section-title" style="margin-top:20px;">Instrucciones r&aacute;pidas por grado</div>
+
+    <div class="day-block">
+      <div style="font-size:14px; font-weight:600; color:#1a3d2b; margin-bottom:8px;">3&deg; y 4&deg; de primaria</div>
+      <div class="day-head dh-1"><div class="day-head-text">D&iacute;a 1 &mdash; mismo d&iacute;a que aplique el cuestionario</div></div>
+      <div class="day-body">
+        <div class="day-row"><div class="dr-num">Cuestionario</div><div class="dr-text">Distribuya el cuestionario y l&eacute;alo en voz alta pregunta por pregunta. Los ni&ntilde;os marcan su respuesta. No d&eacute; su opini&oacute;n sobre cu&aacute;l es la respuesta correcta.</div><div class="dr-time">25&ndash;30 min</div></div>
+        <div class="day-row"><div class="dr-num">Recreo y lunch</div><div class="dr-text">Durante el recreo de ese d&iacute;a, llene el checklist de recreo (15 min) y el checklist de lunch (10 min). Puede hacerlo mientras observa.</div><div class="dr-time">25 min</div></div>
+      </div>
+      <div class="day-head dh-2" style="margin-top:6px;"><div class="day-head-text">D&iacute;a 2 &mdash; al d&iacute;a siguiente o en los siguientes 2 d&iacute;as</div></div>
+      <div class="day-body">
+        <div class="day-row"><div class="dr-num">Mapa del patio</div><div class="dr-text">Forme equipos de 4. D&eacute; una hoja y colores a cada equipo. Consigna: &ldquo;Dibujen el patio y marquen con X d&oacute;nde juegan&rdquo;. No corrija los dibujos &mdash; lo importante es c&oacute;mo lo perciben ellos.</div><div class="dr-time">20 min</div></div>
+        <div class="day-row"><div class="dr-num">Reglas situadas</div><div class="dr-text">Reparta tarjetas verde, amarilla y roja. Lea cada pregunta en voz alta. Los ni&ntilde;os responden levantando la tarjeta. Registre los conteos en la hoja de registro.</div><div class="dr-time">12 min</div></div>
+      </div>
+    </div>
+
+    <div class="day-block" style="margin-top:20px;">
+      <div style="font-size:14px; font-weight:600; color:#1a5276; margin-bottom:8px;">5&deg; y 6&deg; de primaria</div>
+      <div class="day-head" style="background:#1a5276;"><div class="day-head-text">D&iacute;a 1 &mdash; mismo d&iacute;a que distribuya el cuestionario</div></div>
+      <div class="day-body">
+        <div class="day-row"><div class="dr-num">Cuestionario</div><div class="dr-text">Distribuya el cuestionario. Los alumnos lo responden solos en silencio. Usted resuelve dudas sin dar su opini&oacute;n sobre las respuestas.</div><div class="dr-time">25&ndash;30 min</div></div>
+        <div class="day-row"><div class="dr-num">Recreo y lunch</div><div class="dr-text">Igual que en 3&deg;-4&deg;: llene el checklist de recreo y de lunch durante el recreo de ese d&iacute;a.</div><div class="dr-time">25 min</div></div>
+      </div>
+      <div class="day-head" style="background:#154360; margin-top:6px;"><div class="day-head-text">D&iacute;a 2 &mdash; al d&iacute;a siguiente o en los siguientes 2 d&iacute;as</div></div>
+      <div class="day-body">
+        <div class="day-row"><div class="dr-num">Mapa del patio</div><div class="dr-text">Reparta una hoja y colores a cada alumno. Consigna: &ldquo;Dibuja el patio y marca con X d&oacute;nde juegas&rdquo;. Cada quien trabaja solo. No se necesitan tarjetas de colores.</div><div class="dr-time">20 min</div></div>
+        <div class="day-row"><div class="dr-num">Reglas situadas</div><div class="dr-text">Distribuya la hoja de Versi&oacute;n B. Los alumnos la responden solos. Recoja las hojas al terminar.</div><div class="dr-time">15 min</div></div>
+      </div>
+    </div>
+
+    <div class="wa-box">
+      <div class="wa-title">Al terminar cada d&iacute;a &mdash; env&iacute;e por WhatsApp</div>
+      <div class="wa-row">D&iacute;a 1: fotograf&iacute;as de los cuestionarios &middot; checklist de recreo &middot; checklist de lunch</div>
+      <div class="wa-row">D&iacute;a 2: mapas del patio (hoja por hoja, con nombre en el reverso) &middot; hoja de registro o Versi&oacute;n B</div>
+      <div class="wa-note">Guarde los originales f&iacute;sicos para entregárselos al equipo de investigaci&oacute;n. Si tiene dudas, esc&iacute;banos por WhatsApp &mdash; estamos disponibles durante todo el proceso.</div>
+    </div>
+  </div>
+
+  <!-- DOCUMENTOS -->
+  <div id="documentos" class="page">
+    <div class="section-title">Documentos descargables</div>
+    <p style="font-size:13px; color:#666; margin-bottom:20px; line-height:1.6;">Todos los instrumentos y documentos del proyecto est&aacute;n disponibles aqu&iacute;. Haga clic en cualquier bot&oacute;n para descargar el archivo Word correspondiente.</p>
+
+    <div class="section-title" style="font-size:14px;">Paquete 3&deg; y 4&deg; de primaria</div>
+    <div class="doc-group">
+      <a class="doc-btn doc-34" href="Documento1_Cuestionario_Ninos_3ro_4to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Cuestionario para alumnos</div><div class="doc-meta">3&deg; y 4&deg; &middot; Docente lee en voz alta &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-34" href="Documento2_Docente_Dia1_3ro_4to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Paquete docente &mdash; D&iacute;a 1</div><div class="doc-meta">Checklist recreo + lunch &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-34" href="Documento3_Docente_Dia2_3ro_4to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Paquete docente &mdash; D&iacute;a 2</div><div class="doc-meta">Mapa del patio + reglas situadas Versi&oacute;n A &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-34" href="Guia_Docente_3ro_4to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Gu&iacute;a r&aacute;pida para el docente</div><div class="doc-meta">Instrucciones en una p&aacute;gina &middot; .docx</div></div>
+      </a>
+    </div>
+
+    <div class="section-title" style="font-size:14px; margin-top:24px;">Paquete 5&deg; y 6&deg; de primaria</div>
+    <div class="doc-group">
+      <a class="doc-btn doc-56" href="Documento1_Cuestionario_Ninos_5to_6to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Cuestionario para alumnos</div><div class="doc-meta">5&deg; y 6&deg; &middot; Autoaplicado &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-56" href="Documento2_Docente_Dia1_5to_6to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Paquete docente &mdash; D&iacute;a 1</div><div class="doc-meta">Checklist recreo + lunch &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-56" href="Documento3_Docente_Dia2_5to_6to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Paquete docente &mdash; D&iacute;a 2</div><div class="doc-meta">Mapa del patio + reglas situadas Versi&oacute;n B &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-56" href="Guia_Docente_5to_6to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Gu&iacute;a r&aacute;pida para el docente</div><div class="doc-meta">Instrucciones en una p&aacute;gina &middot; .docx</div></div>
+      </a>
+    </div>
+
+    <div class="section-title" style="font-size:14px; margin-top:24px;">Familias y direcci&oacute;n</div>
+    <div class="doc-group">
+      <a class="doc-btn doc-fam" href="Encuesta_Familias.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Encuesta para familias</div><div class="doc-meta">21 preguntas &middot; Autoaplicada &middot; .docx</div></div>
+      </a>
+    </div>
+
+    <div class="section-title" style="font-size:14px; margin-top:24px;">Documentos del proyecto</div>
+    <div class="doc-group">
+      <a class="doc-btn doc-eq" href="Presentacion_Escuelas_Proyecto_Sonora.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Presentaci&oacute;n para escuelas</div><div class="doc-meta">Versi&oacute;n corta &middot; Para directores y docentes &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-eq" href="Documento_Trabajo_Equipo_Proyecto_Sonora.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Documento de trabajo del equipo</div><div class="doc-meta">Versi&oacute;n completa &middot; Marco, instrumentos, cronograma &middot; .docx</div></div>
+      </a>
+    </div>
+
+    <div class="section-title" style="font-size:14px; margin-top:24px;">Instrumentos de Ena Romero y Mario Horta</div>
+    <div class="info-box" style="margin-bottom:12px;">Estos instrumentos son los que aplicar&aacute;n la Dra. Ena Romero y el Dr. Mario Horta. Est&aacute;n disponibles aqu&iacute; para consulta y referencia del equipo.</div>
+    <div class="doc-group">
+      <a class="doc-btn doc-ena" href="FitnessGram.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">FitnessGram</div><div class="doc-meta">7 pruebas de condici&oacute;n f&iacute;sica + antropometr&iacute;a &middot; Mario Horta &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Cuestionario_de_Actitudes_hacia_la_Actividad_Física.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">C.A.E.F. &mdash; Actitudes hacia la Educaci&oacute;n F&iacute;sica</div><div class="doc-meta">Rodr&iacute;guez, Moreno y Guti&eacute;rrez (1996) &middot; Ena Romero &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Cuestionario_Kid_KINDL.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Kid-KINDL &mdash; Calidad de vida infantil</div><div class="doc-meta">Ena Romero &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Cuestionario_De_Satisfacción_con_la_Imagen_Corporal_SIC.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">SIC &mdash; Satisfacci&oacute;n con imagen corporal</div><div class="doc-meta">Garc&iacute;a Tornel y Gaspar, adapt. Raich (2001) &middot; Ena Romero &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Inventario_de_Hábitos_Alimenticios_y_Actividad_Física.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Inventario de h&aacute;bitos alimenticios y actividad f&iacute;sica</div><div class="doc-meta">Ena Romero &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Historia_Clínica.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Historia cl&iacute;nica</div><div class="doc-meta">Para padres o tutores &middot; Ena Romero &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Historia_del_Desarrollo_Psicológico.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Historia del desarrollo psicol&oacute;gico</div><div class="doc-meta">Para padres o tutores &middot; Ena Romero &middot; .pdf</div></div>
+      </a>
+    </div>
+
+    <div class="info-box" style="margin-top:24px;">
+      <strong>Para actualizar un documento:</strong> Descargue el archivo, h&aacute;gale los cambios en Word, y s&uacute;balo de nuevo al repositorio de GitHub con el mismo nombre de archivo &mdash; reemplazar&aacute; la versi&oacute;n anterior autom&aacute;ticamente.
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div id="faq" class="page">
+    <div class="section-title">Preguntas frecuentes</div>
+
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">&iquest;Qu&eacute; pasa si un ni&ntilde;o no quiere responder el cuestionario? <span class="faq-chevron">&#9660;</span></div><div class="faq-a">La participaci&oacute;n es voluntaria. Si un ni&ntilde;o no quiere responder, no hay que presionarlo. Simplemente d&eacute;jelo en blanco y anote en el folio &ldquo;no particip&oacute;&rdquo;. Esto no afecta al grupo ni tiene consecuencias para el alumno.</div></div>
+
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">&iquest;Puedo aplicar los dos d&iacute;as en la misma semana? <span class="faq-chevron">&#9660;</span></div><div class="faq-a">S&iacute;. Lo ideal es que el D&iacute;a 2 sea al d&iacute;a siguiente o en los 2&ndash;3 d&iacute;as siguientes al D&iacute;a 1. No es necesario esperar m&aacute;s tiempo. Lo importante es que no sean el mismo d&iacute;a &mdash; los alumnos necesitan haber tenido al menos un recreo entre una aplicaci&oacute;n y otra.</div></div>
+
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">&iquest;Las fotos de los cuestionarios deben ser de alta calidad? <span class="faq-chevron">&#9660;</span></div><div class="faq-a">No es necesario que sean perfectas, pero s&iacute; que el texto sea legible. Tome la foto con buena luz, sin sombras sobre el papel. Si alguna hoja sali&oacute; ilegible, tome otra foto. Puede enviar las fotos directamente desde la galer&iacute;a del celular por WhatsApp.</div></div>
+
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">&iquest;Qu&eacute; hago si un ni&ntilde;o no entiende alguna pregunta? <span class="faq-chevron">&#9660;</span></div><div class="faq-a">Puede leer la pregunta de nuevo con calma o dar un ejemplo neutral. Lo que no debe hacer es dar su opini&oacute;n sobre cu&aacute;l es la respuesta correcta, ni decirle al ni&ntilde;o qu&eacute; marcar. Si la pregunta genera confusi&oacute;n generalizada en el grupo, an&oacute;telo en las observaciones.</div></div>
+
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">&iquest;Necesito preparar las tarjetas de colores antes del D&iacute;a 2? (3&deg; y 4&deg;) <span class="faq-chevron">&#9660;</span></div><div class="faq-a">S&iacute;. Prepare un juego de tres tarjetas por alumno (verde, amarilla y roja) antes de la sesi&oacute;n del D&iacute;a 2. Pueden ser trozos de papel de color o cartulina recortada. No tienen que ser grandes &mdash; con un tama&ntilde;o de tarjeta de visita es suficiente.</div></div>
+
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">&iquest;Puedo aplicar los instrumentos en cualquier materia? <span class="faq-chevron">&#9660;</span></div><div class="faq-a">S&iacute;. El cuestionario y el mapa del patio pueden aplicarse en cualquier materia. La &uacute;nica condici&oacute;n es que el D&iacute;a 1 incluya observaci&oacute;n del recreo, as&iacute; que ese d&iacute;a s&iacute; necesita ser un d&iacute;a escolar normal con recreo.</div></div>
+
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">&iquest;La encuesta para familias se entrega junto con los instrumentos de los ni&ntilde;os? <span class="faq-chevron">&#9660;</span></div><div class="faq-a">No necesariamente. La encuesta de familias puede distribuirse en cualquier momento durante el periodo de trabajo de campo &mdash; por ejemplo en una junta de padres o a trav&eacute;s de los alumnos como tarea para llevar a casa. Lo importante es recogerla dentro de los siguientes 5 d&iacute;as h&aacute;biles.</div></div>
+
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">&iquest;Qu&eacute; es lo m&aacute;s importante que no debo olvidar? <span class="faq-chevron">&#9660;</span></div><div class="faq-a">Tres cosas: (1) fotografiar y enviar los materiales el mismo d&iacute;a que los aplique, (2) escribir nombre del alumno, grado, grupo y fecha en el reverso de cada dibujo del mapa de patio, y (3) guardar los originales f&iacute;sicos para entregárselos al equipo. Si tiene alguna duda, esc&iacute;banos por WhatsApp.</div></div>
+  </div>
+
+</div>
+
+<script>
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+function toggleFaq(el) {
+  var ans = el.nextElementSibling;
+  var chev = el.querySelector('.faq-chevron');
+  ans.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+</script>
+</body>
+</html>
