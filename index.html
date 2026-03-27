@@ -147,6 +147,34 @@
   .int-who { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
   .int-q { font-size: 12px; color: #666; }
 
+  /* DOCUMENTOS */
+  .doc-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+  .doc-btn { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-radius: 8px; text-decoration: none; border: 1px solid; transition: opacity 0.15s; }
+  .doc-btn:hover { opacity: 0.85; }
+  .doc-icon { font-size: 18px; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; }
+  .doc-name { font-size: 14px; font-weight: 500; }
+  .doc-meta { font-size: 12px; margin-top: 2px; }
+  .doc-34 { background: #f0f7f3; border-color: #a8d4b8; }
+  .doc-34 .doc-icon { background: #1a3d2b; color: #fff; }
+  .doc-34 .doc-name { color: #1a3d2b; }
+  .doc-34 .doc-meta { color: #2d7a4f; }
+  .doc-56 { background: #eaf2fb; border-color: #a8c8e8; }
+  .doc-56 .doc-icon { background: #1a5276; color: #fff; }
+  .doc-56 .doc-name { color: #1a5276; }
+  .doc-56 .doc-meta { color: #2874a6; }
+  .doc-fam { background: #e8f5ef; border-color: #9fd4b8; }
+  .doc-fam .doc-icon { background: #0f6e56; color: #fff; }
+  .doc-fam .doc-name { color: #0f6e56; }
+  .doc-fam .doc-meta { color: #1a8a6a; }
+  .doc-eq { background: #f4f4f0; border-color: #c8c8c0; }
+  .doc-eq .doc-icon { background: #2c2c2a; color: #fff; }
+  .doc-eq .doc-name { color: #2c2c2a; }
+  .doc-eq .doc-meta { color: #666; }
+  .doc-ena { background: #e8f5ee; border-color: #9fd8b4; }
+  .doc-ena .doc-icon { background: #0d6b40; color: #fff; }
+  .doc-ena .doc-name { color: #0d6b40; }
+  .doc-ena .doc-meta { color: #1a8a56; }
+
   /* WHATSAPP BOX */
   .wa-box { background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 8px; padding: 14px 16px; margin-top: 14px; }
   .wa-title { font-size: 13px; font-weight: 600; color: #1b5e20; margin-bottom: 8px; }
@@ -169,6 +197,7 @@
   <button class="nav-btn" onclick="showPage('equipo', this)">El equipo</button>
   <button class="nav-btn" onclick="showPage('contextos', this)">Contextos</button>
   <button class="nav-btn" onclick="showPage('instrumentos', this)">Instrumentos</button>
+  <button class="nav-btn" onclick="showPage('documentos', this)">Documentos</button>
   <button class="nav-btn" onclick="showPage('docentes', this)">Para docentes</button>
   <button class="nav-btn" onclick="showPage('faq', this)">Preguntas frecuentes</button>
 </div>
@@ -209,13 +238,14 @@
     <div class="section-title">El equipo de investigaci&oacute;n</div>
     <div class="team-card">
       <div class="team-header"><div class="avatar av-ena">ER</div><div><div class="team-name">Dra. Ena Romero</div><div class="team-role">Psicolog&iacute;a escolar &middot; Universidad de Sonora</div></div></div>
-      <div class="team-q">&iquest;C&oacute;mo se sienten los ni&ntilde;os y qu&eacute; actitudes tienen?</div>
+      <div class="team-q">&iquest;C&oacute;mo se sienten los ni&ntilde;os, c&oacute;mo es su bienestar y qu&eacute; actitudes tienen?</div>
       <div class="tag-list">
-        <span class="tag tag-g">Kid-KINDL &mdash; calidad de vida</span>
-        <span class="tag tag-g">C.A.E.F. &mdash; actitudes hacia EF</span>
-        <span class="tag tag-g">SIC &mdash; imagen corporal</span>
-        <span class="tag tag-g">Historia cl&iacute;nica</span>
-        <span class="tag tag-g">Historia del desarrollo psicol&oacute;gico</span>
+        <span class="tag tag-g">C.A.E.F. &mdash; actitudes hacia Educaci&oacute;n F&iacute;sica (Rodr&iacute;guez, Moreno y Guti&eacute;rrez, 1996)</span>
+        <span class="tag tag-g">Kid-KINDL &mdash; calidad de vida infantil</span>
+        <span class="tag tag-g">SIC &mdash; satisfacci&oacute;n con imagen corporal (Garc&iacute;a Tornel y Gaspar, adapt. Raich 2001)</span>
+        <span class="tag tag-g">Inventario de h&aacute;bitos alimenticios y actividad f&iacute;sica</span>
+        <span class="tag tag-g">Historia cl&iacute;nica &mdash; para padres o tutores</span>
+        <span class="tag tag-g">Historia del desarrollo psicol&oacute;gico &mdash; para padres o tutores</span>
       </div>
     </div>
     <div class="team-card">
@@ -322,7 +352,9 @@
         <tr><td class="td-num">2</td><td class="td-name">C.A.E.F. &mdash; actitudes hacia Educaci&oacute;n F&iacute;sica</td><td class="td-quien">Ena / docente</td><td class="td-time">20&ndash;25 min</td><td class="td-day">En clase</td></tr>
         <tr><td class="td-num">3</td><td class="td-name">Kid-KINDL &mdash; calidad de vida infantil</td><td class="td-quien">Ena / docente</td><td class="td-time">20&ndash;25 min</td><td class="td-day">En clase</td></tr>
         <tr><td class="td-num">4</td><td class="td-name">SIC &mdash; satisfacci&oacute;n con imagen corporal</td><td class="td-quien">Ena / docente</td><td class="td-time">15 min</td><td class="td-day">En clase</td></tr>
-        <tr><td class="td-num">5</td><td class="td-name">Historia cl&iacute;nica e Historia del desarrollo psicol&oacute;gico</td><td class="td-quien">Ena con padres</td><td class="td-time">15&ndash;20 min</td><td class="td-day">Con familias</td></tr>
+        <tr><td class="td-num">5</td><td class="td-name">Inventario de h&aacute;bitos alimenticios y actividad f&iacute;sica</td><td class="td-quien">Ena / docente</td><td class="td-time">20 min</td><td class="td-day">En clase</td></tr>
+        <tr><td class="td-num">6</td><td class="td-name">Historia cl&iacute;nica &mdash; antecedentes m&eacute;dicos y perinatales</td><td class="td-quien">Ena con padres/tutores</td><td class="td-time">15&ndash;20 min</td><td class="td-day">Con familias</td></tr>
+        <tr><td class="td-num">7</td><td class="td-name">Historia del desarrollo psicol&oacute;gico &mdash; antecedentes familiares y emocionales</td><td class="td-quien">Ena con padres/tutores</td><td class="td-time">15&ndash;20 min</td><td class="td-day">Con familias</td></tr>
       </tbody></table>
     </div>
   </div>
@@ -381,6 +413,109 @@
       <div class="wa-row">D&iacute;a 1: fotograf&iacute;as de los cuestionarios &middot; checklist de recreo &middot; checklist de lunch</div>
       <div class="wa-row">D&iacute;a 2: mapas del patio (hoja por hoja, con nombre en el reverso) &middot; hoja de registro o Versi&oacute;n B</div>
       <div class="wa-note">Guarde los originales f&iacute;sicos para entregárselos al equipo de investigaci&oacute;n. Si tiene dudas, esc&iacute;banos por WhatsApp &mdash; estamos disponibles durante todo el proceso.</div>
+    </div>
+  </div>
+
+  <!-- DOCUMENTOS -->
+  <div id="documentos" class="page">
+    <div class="section-title">Documentos descargables</div>
+    <p style="font-size:13px; color:#666; margin-bottom:20px; line-height:1.6;">Todos los instrumentos y documentos del proyecto est&aacute;n disponibles aqu&iacute;. Haga clic en cualquier bot&oacute;n para descargar el archivo Word correspondiente.</p>
+
+    <div class="section-title" style="font-size:14px;">Paquete 3&deg; y 4&deg; de primaria</div>
+    <div class="doc-group">
+      <a class="doc-btn doc-34" href="Documento1_Cuestionario_Ninos_3ro_4to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Cuestionario para alumnos</div><div class="doc-meta">3&deg; y 4&deg; &middot; Docente lee en voz alta &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-34" href="Documento2_Docente_Dia1_3ro_4to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Paquete docente &mdash; D&iacute;a 1</div><div class="doc-meta">Checklist recreo + lunch &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-34" href="Documento3_Docente_Dia2_3ro_4to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Paquete docente &mdash; D&iacute;a 2</div><div class="doc-meta">Mapa del patio + reglas situadas Versi&oacute;n A &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-34" href="Guia_Docente_3ro_4to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Gu&iacute;a r&aacute;pida para el docente</div><div class="doc-meta">Instrucciones en una p&aacute;gina &middot; .docx</div></div>
+      </a>
+    </div>
+
+    <div class="section-title" style="font-size:14px; margin-top:24px;">Paquete 5&deg; y 6&deg; de primaria</div>
+    <div class="doc-group">
+      <a class="doc-btn doc-56" href="Documento1_Cuestionario_Ninos_5to_6to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Cuestionario para alumnos</div><div class="doc-meta">5&deg; y 6&deg; &middot; Autoaplicado &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-56" href="Documento2_Docente_Dia1_5to_6to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Paquete docente &mdash; D&iacute;a 1</div><div class="doc-meta">Checklist recreo + lunch &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-56" href="Documento3_Docente_Dia2_5to_6to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Paquete docente &mdash; D&iacute;a 2</div><div class="doc-meta">Mapa del patio + reglas situadas Versi&oacute;n B &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-56" href="Guia_Docente_5to_6to.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Gu&iacute;a r&aacute;pida para el docente</div><div class="doc-meta">Instrucciones en una p&aacute;gina &middot; .docx</div></div>
+      </a>
+    </div>
+
+    <div class="section-title" style="font-size:14px; margin-top:24px;">Familias y direcci&oacute;n</div>
+    <div class="doc-group">
+      <a class="doc-btn doc-fam" href="Encuesta_Familias.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Encuesta para familias</div><div class="doc-meta">21 preguntas &middot; Autoaplicada &middot; .docx</div></div>
+      </a>
+    </div>
+
+    <div class="section-title" style="font-size:14px; margin-top:24px;">Documentos del proyecto</div>
+    <div class="doc-group">
+      <a class="doc-btn doc-eq" href="Presentacion_Escuelas_Proyecto_Sonora.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Presentaci&oacute;n para escuelas</div><div class="doc-meta">Versi&oacute;n corta &middot; Para directores y docentes &middot; .docx</div></div>
+      </a>
+      <a class="doc-btn doc-eq" href="Documento_Trabajo_Equipo_Proyecto_Sonora.docx" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Documento de trabajo del equipo</div><div class="doc-meta">Versi&oacute;n completa &middot; Marco, instrumentos, cronograma &middot; .docx</div></div>
+      </a>
+    </div>
+
+    <div class="section-title" style="font-size:14px; margin-top:24px;">Instrumentos de Ena Romero y Mario Horta</div>
+    <div class="info-box" style="margin-bottom:12px;">Estos instrumentos son los que aplicar&aacute;n la Dra. Ena Romero y el Dr. Mario Horta. Est&aacute;n disponibles aqu&iacute; para consulta y referencia del equipo.</div>
+    <div class="doc-group">
+      <a class="doc-btn doc-ena" href="FitnessGram.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">FitnessGram</div><div class="doc-meta">7 pruebas de condici&oacute;n f&iacute;sica + antropometr&iacute;a &middot; Mario Horta &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Cuestionario_de_Actitudes_hacia_la_Actividad_Física.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">C.A.E.F. &mdash; Actitudes hacia la Educaci&oacute;n F&iacute;sica</div><div class="doc-meta">Rodr&iacute;guez, Moreno y Guti&eacute;rrez (1996) &middot; Ena Romero &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Cuestionario_Kid_KINDL.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Kid-KINDL &mdash; Calidad de vida infantil</div><div class="doc-meta">Ena Romero &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Cuestionario_De_Satisfacción_con_la_Imagen_Corporal_SIC.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">SIC &mdash; Satisfacci&oacute;n con imagen corporal</div><div class="doc-meta">Garc&iacute;a Tornel y Gaspar, adapt. Raich (2001) &middot; Ena Romero &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Inventario_de_Hábitos_Alimenticios_y_Actividad_Física.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Inventario de h&aacute;bitos alimenticios y actividad f&iacute;sica</div><div class="doc-meta">Ena Romero &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Historia_Clínica.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Historia cl&iacute;nica</div><div class="doc-meta">Para padres o tutores &middot; Ena Romero &middot; .pdf</div></div>
+      </a>
+      <a class="doc-btn doc-ena" href="Historia_del_Desarrollo_Psicológico.pdf" download>
+        <span class="doc-icon">&#8595;</span>
+        <div><div class="doc-name">Historia del desarrollo psicol&oacute;gico</div><div class="doc-meta">Para padres o tutores &middot; Ena Romero &middot; .pdf</div></div>
+      </a>
+    </div>
+
+    <div class="info-box" style="margin-top:24px;">
+      <strong>Para actualizar un documento:</strong> Descargue el archivo, h&aacute;gale los cambios en Word, y s&uacute;balo de nuevo al repositorio de GitHub con el mismo nombre de archivo &mdash; reemplazar&aacute; la versi&oacute;n anterior autom&aacute;ticamente.
     </div>
   </div>
 
